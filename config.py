@@ -9,6 +9,7 @@ beta_1 = 0.5
 beta_2 = 0.999
 c_lambda = 10
 crit_repeats = 5
+grad_penalty = 10
 
 # data
 image_root = './data/croped_images/images'
