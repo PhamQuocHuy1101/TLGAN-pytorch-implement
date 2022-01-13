@@ -27,3 +27,6 @@ def gradient_penalty(grad):
 
 def disc_loss(real, fake, grad):
     return torch.mean(real - fake + grad)
+
+def gen_loss(fake):
+    return torch.mean(fake) * -1.0
