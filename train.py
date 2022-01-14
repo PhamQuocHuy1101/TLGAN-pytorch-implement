@@ -45,6 +45,7 @@ dataset = WrapData(files, cf.image_root, cf.map_root, to_tensor)
 train_loader = DataLoader(dataset, batch_size=cf.batch_size, shuffle=True)
 
 # logs
+os.makedirs(cf.log_files, exist_ok=True)
 sw = SummaryWriter(cf.log_files)
 
 step = 0
