@@ -1,3 +1,5 @@
 .ipynb_checkpoints/
 *.zip
 dataset/
+__pycache__/
+checkpoint/

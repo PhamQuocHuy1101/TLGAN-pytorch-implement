@@ -1,21 +1,20 @@
 # optim
-device = 'cuda:0'
+device = 'cuda:1'
 n_epochs = 100
-z_dim = 64
 display_step = 50
-batch_size = 128
+batch_size = 8
 lr = 0.0002
 beta_1 = 0.5
 beta_2 = 0.999
 c_lambda = 10
-crit_repeats = 5
+crit_repeats = 1
 grad_penalty = 10
 lr_decay = 10
 checkpoint_interval = 100
 
 # data
-image_root = './data/croped_images/images'
-map_root = './data/croped_images/map_images'
+image_root = './data/dataset/croped_images/images'
+map_root = './data/dataset/croped_images/map_images'
 
 # checkpoint path
 continue_training = False

@@ -86,4 +86,4 @@ class Discriminator(nn.Module):
             out = block(out)
         out = out.permute(0, 2, 3, 1)
         out = self.dense(out)
-        return torch.flatten(start_dim = 1)
+        return torch.flatten(out, start_dim = 1)

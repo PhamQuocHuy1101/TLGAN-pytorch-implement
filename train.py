@@ -55,13 +55,15 @@ for epoch in range(last_epoch + 1, cf.n_epochs, 1):
     print(f'Epoch {epoch} ==================================================')
 
     for r_img, r_map_img in tqdm(train_loader):
+        #print(r_img.shape, r_map_img.shape)
         r_img = r_img.to(device = cf.device)
         r_map_img = r_map_img.to(device = cf.device)
         cur_batch_size = len(r_img)
 
         # disc
         disc_loss_item = 0.0
-        f_map_img = gen(r_map_img)
+        f_map_img = gen(r_img)
+        
         for _ in range(cf.crit_repeats):
             opt_disc.zero_grad()
 
@@ -83,7 +85,7 @@ for epoch in range(last_epoch + 1, cf.n_epochs, 1):
         
         # gen
         opt_gen.zero_grad()
-        f_map_img = gen(r_map_img)
+        f_map_img = gen(r_img)
         disc_f_map_img = disc(f_map_img)
         gen_loss_item = utils.gen_loss(disc_f_map_img)
         gen_loss_item.backward()
