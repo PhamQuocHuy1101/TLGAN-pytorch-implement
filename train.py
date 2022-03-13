@@ -61,17 +61,20 @@ for epoch in range(last_epoch + 1, cf.n_epochs, 1):
 
         # disc
         disc_loss_item = 0.0
+        f_map_img = gen(r_map_img)
         for _ in range(cf.crit_repeats):
             opt_disc.zero_grad()
 
-            f_map_img = gen(r_map_img)
             disc_r_map_img = disc(r_map_img)
             disc_f_map_img = disc(f_map_img.detach())
 
-            eps = torch.randn(cur_batch_size, 1, 1, 1).to(device = cf.device)
-            grad = utils.compute_gradient(disc, r_map_img, f_map_img, eps)
-            grad_loss = cf.grad_penalty * utils.gradient_penalty(grad)
-            loss = utils.disc_loss(disc_r_map_img, disc_f_map_img, grad_loss)
+            # Gradient penalty
+            # eps = torch.randn(cur_batch_size, 1, 1, 1).to(device = cf.device)
+            # grad = utils.compute_gradient(disc, r_map_img, f_map_img, eps)
+            # grad_loss = cf.grad_penalty * utils.gradient_penalty(grad)
+            # loss = utils.disc_loss_gp(disc_r_map_img, disc_f_map_img, grad_loss)
+
+            loss = utils.disc_loss(disc_r_map_img, disc_f_map_img)
 
             loss.backward(retain_graph = True)
             opt_disc.step()

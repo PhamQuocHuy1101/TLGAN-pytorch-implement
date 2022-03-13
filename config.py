@@ -1,5 +1,5 @@
 # optim
-device = '0,1'
+device = 'cuda:0'
 n_epochs = 100
 z_dim = 64
 display_step = 50

@@ -26,7 +26,7 @@ class Generator(nn.Module):
             nn.Conv2d(in_channels, hidden_channels, kernel_size=9, stride=1, padding=4, bias=True ),
             nn.ReLU(inplace=True)
         )
-        self.blocks = nn.ModuleList([ResidualBlock(channel = hidden_channels) for i in range(n_blocks)])
+        self.blocks = nn.ModuleList([ResidualBlock(channel = hidden_channels) for _ in range(n_blocks)])
         self.residual_final = nn.Sequential(
             nn.Conv2d(hidden_channels, hidden_channels, kernel_size=3, stride=1, padding=1, bias=True ),
             nn.BatchNorm2d(hidden_channels)
@@ -70,11 +70,6 @@ class Discriminator(nn.Module):
             nn.Linear(self.hidden_channels*8, self.hidden_channels*16),
             nn.LeakyReLU(0.2),
             nn.Linear(self.hidden_channels*16, 1),
-            nn.LeakyReLU(0.2)
-        )
-
-        self.classifier = nn.Sequential(
-            nn.Linear(16, 1),
             nn.Sigmoid()
         )
     
@@ -90,7 +85,5 @@ class Discriminator(nn.Module):
         for block in self.conv_blocks:
             out = block(out)
         out = out.permute(0, 2, 3, 1)
-        # out = self.dense(out.view(X.shape[0], int(self.input_size / 2**3), -1))
         out = self.dense(out)
-        out = self.classifier(out.view(X.shape[0], -1))
-        return out
+        return torch.flatten(start_dim = 1)
