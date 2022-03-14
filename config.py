@@ -8,6 +8,7 @@ beta_1 = 0.5
 beta_2 = 0.999
 c_lambda = 10
 crit_repeats = 1
+gen_repeats = 10
 grad_penalty = 10
 lr_decay = 10
 checkpoint_interval = 100

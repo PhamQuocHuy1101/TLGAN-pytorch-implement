@@ -51,6 +51,7 @@ sw = SummaryWriter(cf.log_files)
 step = 0
 gen.train()
 disc.train()
+
 for epoch in range(last_epoch + 1, cf.n_epochs, 1):
     print(f'Epoch {epoch} ==================================================')
 
@@ -84,15 +85,18 @@ for epoch in range(last_epoch + 1, cf.n_epochs, 1):
         disc_loss_item /= cf.crit_repeats
         
         # gen
-        opt_gen.zero_grad()
-        f_map_img = gen(r_img)
-        disc_f_map_img = disc(f_map_img)
-        gen_loss_item = utils.gen_loss(disc_f_map_img)
-        gen_loss_item.backward()
-        opt_gen.step()
+        gen_loss_item = 0.0
+        for _ in range(cf.gen_repeats):
+            opt_gen.zero_grad()
+            f_map_img = gen(r_img)
+            disc_f_map_img = disc(f_map_img)
+            loss = utils.gen_loss(disc_f_map_img)
+            loss.backward()
+            opt_gen.step()
+            gen_loss_item += loss.item()
 
         sw.add_scalar('loss/disciminator', disc_loss_item, step)
-        sw.add_scalar('loss/generator', gen_loss_item.item(), step)
+        sw.add_scalar('loss/generator', gen_loss_item, step)
 
         step += 1
         if step % cf.checkpoint_interval == 0:

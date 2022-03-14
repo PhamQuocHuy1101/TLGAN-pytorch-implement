@@ -5,7 +5,7 @@ class ResidualBlock(nn.Module):
     def __init__(self, channel = 64, kernel = 3, stride = 1, padding=1):
         super(ResidualBlock, self).__init__()
         self.conv_1 = nn.Conv2d(channel, channel, kernel_size=kernel, stride=stride, padding=padding, bias=True)
-        self.ac_1 = nn.ReLU(inplace=True)
+        self.ac_1 = nn.ReLU()
         self.batch_norm_1 = nn.BatchNorm2d(channel)
         self.conv_2 = nn.Conv2d(channel, channel, kernel_size=kernel, stride=stride, padding=padding, bias=True)
         self.batch_norm_2 = nn.BatchNorm2d(channel)
@@ -24,7 +24,7 @@ class Generator(nn.Module):
         hidden_channels = 64
         self.block_input = nn.Sequential(
             nn.Conv2d(in_channels, hidden_channels, kernel_size=9, stride=1, padding=4, bias=True ),
-            nn.ReLU(inplace=True)
+            nn.ReLU()
         )
         self.blocks = nn.ModuleList([ResidualBlock(channel = hidden_channels) for _ in range(n_blocks)])
         self.residual_final = nn.Sequential(
@@ -33,9 +33,9 @@ class Generator(nn.Module):
         )
         self.conv_final = nn.Sequential(
             nn.Conv2d(hidden_channels, hidden_channels*4, kernel_size=3, stride=1, padding=1, bias=True ),
-            nn.ReLU(inplace=True),
+            nn.ReLU(),
             nn.Conv2d(hidden_channels*4, out_channels, kernel_size=9, stride=1, padding=4, bias=True ),
-            nn.Tanh()
+            nn.Sigmoid()
         )
     def forward(self, X):
         output_1 = self.block_input(X)
